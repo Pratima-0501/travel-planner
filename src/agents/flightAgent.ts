@@ -6,15 +6,14 @@ dotenv.config();
 
 export class FlightAgent {
   private ai: GoogleGenAI;
-  private model= "gemini-2.5-flash";
+  private model = "gemini-3.6-flash";
 
   public history: Message[] = [];
   public tripState: TripState = {};
 
   constructor() {
-    this.ai = new GoogleGenAI({
-      apiKey: process.env.GOOGLE_GENAI_API_KEY || "",
-    });
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
+    this.ai = new GoogleGenAI(apiKey ? { apiKey } : {});
   }
 
     private getInstructions(): string {
@@ -27,7 +26,7 @@ export class FlightAgent {
 
     public async sendMessage(userInput: string): Promise<string> {
     this.history.push({ role: "user", parts: [{ text: userInput }] });
-   
+    console.log("User Input:", userInput);
     const response = await this.ai.models.generateContent({
       model: this.model,
       contents: this.history,
@@ -39,7 +38,7 @@ export class FlightAgent {
 
     console.log("AI Response:", response);
     const reply = response.text;
-    this.history.push({ role: "assistant", parts: [{ text: reply !}] });
+    this.history.push({ role: "assistant", parts: [{ text: reply || "" }] });
     return reply ? reply : "I'm sorry, I couldn't generate a response.";
   }
 }
