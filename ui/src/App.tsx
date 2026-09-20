@@ -13,7 +13,7 @@ export default function App() {
     {
       id: 'init',
       sender: 'agent',
-      text: 'Hello! I am your coordinated travel agent team. Tell me where you want to go, your budget, or ask about live weather.',
+      text: 'Hanji main aapka ticket wala bhaiya bol rha hu. Bataiye, kahan jaana chahenge iss baar?',
     },
   ]);
   const [input, setInput] = useState('');
@@ -94,7 +94,7 @@ export default function App() {
       <header className="h-12 border-b border-[#2f2f2f] flex items-center justify-between px-6 bg-[#212121]/80 backdrop-blur sticky top-0 z-10">
         <div className="flex items-center gap-2 font-medium text-sm text-gray-200">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-          <span>Agent Orchestrator</span>
+          <span>TIcket Wale Bhaiya Official</span>
         </div>
         <button
           onClick={() => setMessages([])}
