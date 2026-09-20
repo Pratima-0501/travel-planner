@@ -9,3 +9,10 @@ export interface Message {
     role: "user" | "assistant";
     parts: [{ text: string }];
 }
+
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'agent';
+  text: string;
+  timestamp: string;
+}

@@ -5,7 +5,7 @@ dotenv.config();
 
 export class HotelAgent {
   private ai: GoogleGenAI;
-  private model = "gemini-3.6-flash";   
+  private model = "gemini-3.5-flash";   
 
   constructor() {
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;

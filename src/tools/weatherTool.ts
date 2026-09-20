@@ -1,27 +1,28 @@
-import { FunctionDeclaration, Type } from "@google/genai";
+export async function fetchLiveWeather(location: string): Promise<string> {
+  try {
+    const geoRes = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=1`
+    );
+    const geoData = await geoRes.json();
 
-export const weatherToolDeclaration : FunctionDeclaration = {
-    name: "get_weather",
-    description: "Fetches Real Time Temperature and conditions for a travel destination.",
-    parameters: {
-        type: Type.OBJECT,
-        properties: {
-            location: {
-                type: Type.STRING,
-                description: "City or Destination name for which the weather information is to be fetched. For example, 'New York', 'Paris', 'Tokyo', etc."
-            }
-        },
-        required: ["location"]
+    if (!geoData.results || geoData.results.length === 0) {
+      return `Could not find weather coordinates for "${location}".`;
     }
 
-};
+    const { latitude, longitude, name, country } = geoData.results[0];
+    const weatherRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m`
+    );
+    const weatherData = await weatherRes.json();
 
-export async function execWeatherTool(args: {location: string}) : Promise<object>{
-    return { 
-        location : args.location,
-        temperatureCelsius: 19.5,
-        conditions: "partly cloudy" ,
-        updatedAt: new Date().toISOString()
-    };
+    return `${name}, ${country}: ${weatherData.current.temperature_2m}°C, Humidity: ${weatherData.current.relative_humidity_2m}%`;
+  } catch {
+    return 'Weather service currently unavailable.';
+  }
 }
 
+export function computeDailyBudget(totalBudget: number, days: number): string {
+  if (days <= 0) return 'Duration must be at least 1 day.';
+  const daily = (totalBudget / days).toFixed(2);
+  return `$${daily} / day`;
+}
