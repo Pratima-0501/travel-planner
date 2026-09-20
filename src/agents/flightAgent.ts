@@ -6,7 +6,7 @@ dotenv.config();
 
 export class FlightAgent {
   private ai: GoogleGenAI;
-  private model = "gemini-3.6-flash";
+  private model = "gemini-3.5-flash";
 
   public history: Message[] = [];
   public tripState: TripState = {};
@@ -36,7 +36,7 @@ export class FlightAgent {
       },
     });
 
-    console.log("AI Response:", response);
+    // console.log("AI Response:", response);
     const reply = response.text;
     this.history.push({ role: "assistant", parts: [{ text: reply || "" }] });
     return reply ? reply : "I'm sorry, I couldn't generate a response.";
